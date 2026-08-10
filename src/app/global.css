@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  --bg-primary: #dbdbdb;
+  --bg-secondary: #f1f1f1;
+  --bg-tertiary: #fafafa;
+
+  --font-primary: #0d0d0d;
+  --font-secondary: #676767;
+  --font-tertiary: #8e8e8e;
+
+  --positive-primary: #51a885;
+  --negative-primary: #a85151;
+}
+
+@theme inline {
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+
+  --color-font-primary: var(--font-primary);
+  --color-font-secondary: var(--font-secondary);
+  --color-font-tertiary: var(--font-tertiary);
+
+  --color-positive-primary: var(--positive-primary);
+  --color-negative-primary: var(--negative-primary);
+}
+
+body {
+  color: var(--font-primary);
+  font-family: var(--stack-sans);
+}
