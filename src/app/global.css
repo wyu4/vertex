@@ -28,5 +28,6 @@
 
 body {
   color: var(--font-primary);
-  font-family: var(--stack-sans);
+  font-family: var(--stack-sans), Arial;
+  margin-block: 0;
 }
