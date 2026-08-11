@@ -9,6 +9,7 @@ export function useTimelineRef(
   const ref = useRef<gsap.core.Timeline>(null);
   useLayoutEffect(() => {
     ref.current = gsap.timeline();
+    ref.current.pause();
     setupCallback?.(ref.current);
 
     return () => {

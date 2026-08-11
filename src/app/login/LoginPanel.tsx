@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { SecondaryDiv, TertiaryDiv } from "../reusable/DivPresets";
 import { signIn, signUp, sendVerificationEmail } from "@/utils/auth/client";
+import { ChangingLabel } from "../reusable/LabelPresets";
 
 gsap.registerPlugin(useGSAP);
 
@@ -14,8 +15,6 @@ export default function LoginPanel() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
   const nameFieldRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
@@ -164,12 +163,16 @@ export default function LoginPanel() {
       className="relative rounded-2xl flex flex-col justify-start items-center p-10 gap-5"
     >
       <TertiaryDiv className="relative flex flex-col justify-center items-center rounded-2xl min-w-70 p-5 gap-1">
-        <h1 className="text-xl text-center font-bold">
-          {isLogin ? "Log In" : "Register"}
-        </h1>
-        <p className="text-center text-font-secondary text-sm">
-          {isLogin ? "Welcome back" : "Create an account to get started"}
-        </p>
+        <ChangingLabel
+          className="text-xl text-center font-bold"
+          text={isLogin ? "Log In" : "Register"}
+          delayTime={0.25}
+        />
+        <ChangingLabel
+          className="text-center text-font-secondary text-sm"
+          text={isLogin ? "Welcome back" : "Create an account to get started"}
+          delayTime={0.2}
+        />
       </TertiaryDiv>
 
       <TertiaryDiv
