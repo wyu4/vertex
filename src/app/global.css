@@ -11,6 +11,13 @@
 
   --positive-primary: #51a885;
   --negative-primary: #a85151;
+
+  --grade-pink: #ac5380;
+  --grade-yellow: #ac9d53;
+  --grade-green: #53ac71;
+  --grade-orange: #ac8053;
+  --grade-blue: #5380ac;
+  --grade-white: #efece3;
 }
 
 @theme inline {
@@ -24,6 +31,13 @@
 
   --color-positive-primary: var(--positive-primary);
   --color-negative-primary: var(--negative-primary);
+
+  --color-grade-pink: var(--grade-pink);
+  --color-grade-yellow: var(--grade-yellow);
+  --color-grade-green: var(--grade-green);
+  --color-grade-orange: var(--grade-orange);
+  --color-grade-blue: var(--grade-blue);
+  --color-grade-white: var(--grade-white);
 }
 
 body {
