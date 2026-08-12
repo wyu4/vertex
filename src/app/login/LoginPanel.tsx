@@ -4,11 +4,8 @@ import { SubmitEventHandler, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { SecondaryDiv, TertiaryDiv } from "../reusable/DivPresets";
+import { ChangingLabel, SecondaryDiv, TertiaryDiv } from "../reusable/Presets";
 import { signIn, signUp, sendVerificationEmail } from "@/utils/auth/client";
-import { ChangingLabel } from "../reusable/LabelPresets";
-
-gsap.registerPlugin(useGSAP);
 
 export default function LoginPanel() {
   const router = useRouter();

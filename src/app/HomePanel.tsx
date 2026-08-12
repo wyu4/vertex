@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { SecondaryDiv, TertiaryDiv } from "./reusable/DivPresets";
+import { ChangingLabel, SecondaryDiv, TertiaryDiv } from "./reusable/Presets";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { ChangingLabel } from "./reusable/LabelPresets";
 
 export default function HomePanel() {
   const [grade, setGrade] = useState<Grade | null>(null);

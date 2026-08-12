@@ -1,12 +1,26 @@
-import { PType } from "@/types/global";
+import { DivType, PType } from "@/types/global";
 import { bindRefAndForwardRef } from "@/utils/ref-helpers";
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
 import { forwardRef, useRef } from "react";
 import { useTimelineRef } from "../hooks/Animation";
-import { TextPlugin } from "gsap/all";
+import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(TextPlugin);
+
+export const SecondaryDiv = forwardRef<HTMLDivElement, DivType>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={`bg-bg-secondary ${className}`} {...props} />
+  ),
+);
+
+export const TertiaryDiv = forwardRef<HTMLDivElement, DivType>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={`bg-bg-tertiary shadow-md/5 ${className}`}
+      {...props}
+    />
+  ),
+);
 
 export const ChangingLabel = forwardRef<
   HTMLParagraphElement,
