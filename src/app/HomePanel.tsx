@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ChangingLabel, SecondaryDiv, TertiaryDiv } from "./reusable/Presets";
+import {
+  BooleanSwitch,
+  ChangingLabel,
+  SecondaryDiv,
+  TertiaryDiv,
+} from "./reusable/Presets";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
@@ -81,7 +86,10 @@ export default function HomePanel() {
           </TertiaryDiv>
         </div>
       </TertiaryDiv>
-      <TertiaryDiv className="relative flex flex-col w-full justify-center items-center rounded-2xl p-5 gap-2"></TertiaryDiv>
+      <TertiaryDiv className="relative flex flex-row w-full justify-between items-center rounded-2xl p-5 gap-2">
+        <p className="text-xl text-center font-bold">Flash climb</p>
+        <BooleanSwitch onSwitch={(v) => setFlashed(v)} />
+      </TertiaryDiv>
     </SecondaryDiv>
   );
 }
@@ -122,11 +130,11 @@ export function GradeButton({
   return (
     <span
       ref={container}
-      className="relative bg-bg-secondary rounded-xl overflow-clip place-items-center w-10 h-5 shadow-lg shadow-black/20 ring-1 ring-black/10"
+      className="relative bg-bg-secondary rounded-xl overflow-clip place-items-center w-10 h-5 shadow-lg shadow-font-primary/20 ring-1 ring-black/10"
     >
       <button
         ref={ref}
-        className="absolute w-full h-full"
+        className="absolute w-full h-full cursor-grab"
         onMouseEnter={() => setMouseEntered(true)}
         onMouseLeave={() => setMouseEntered(false)}
         onClick={onSelect}
