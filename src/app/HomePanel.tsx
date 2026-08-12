@@ -9,6 +9,9 @@ import {
 } from "./reusable/Presets";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { FaBoltLightning } from "react-icons/fa6";
+import { GiUpgrade } from "react-icons/gi";
+import { GrScorecard } from "react-icons/gr";
 
 export default function HomePanel() {
   const [grade, setGrade] = useState<Grade | null>(null);
@@ -50,7 +53,11 @@ export default function HomePanel() {
         />
       </TertiaryDiv>
       <TertiaryDiv className="relative flex flex-col w-full justify-center items-center rounded-2xl p-5 gap-2">
-        <h1 className="text-2xl text-center font-bold">Grade</h1>
+        <div className="text-2xl font-bold flex flex-row justify-center items-center gap-2">
+          <GrScorecard className="text-xl" />
+          <h1>Grade</h1>
+        </div>
+
         <div className="relative h-10 flex flex-row justify-center items-center flex-nowrap gap-5">
           <GradeButton
             color="var(--grade-pink)"
@@ -87,7 +94,13 @@ export default function HomePanel() {
         </div>
       </TertiaryDiv>
       <TertiaryDiv className="relative flex flex-row w-full justify-between items-center rounded-2xl p-5 gap-2">
-        <p className="text-xl text-center font-bold">Flash climb</p>
+        <div className="text-xl font-bold flex flex-row justify-start items-center gap-2">
+          <FaBoltLightning className="text-sm" />
+          <p>
+            Flash climb{" "}
+            <i className="font-normal text-font-secondary">(x2 points)</i>
+          </p>
+        </div>
         <BooleanSwitch onSwitch={(v) => setFlashed(v)} />
       </TertiaryDiv>
     </SecondaryDiv>
