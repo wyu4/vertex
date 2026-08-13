@@ -10,42 +10,30 @@ import {
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { FaBoltLightning } from "react-icons/fa6";
-import { GiUpgrade } from "react-icons/gi";
-import { GrScorecard } from "react-icons/gr";
+import { GrScorecard, GrTableAdd } from "react-icons/gr";
+import { resolveCssColor } from "@/utils/animation-helpers";
+import { calculatePointsForClimb } from "@/utils/calculator";
 
 export default function HomePanel() {
+  const [points, setPoints] = useState(0);
   const [grade, setGrade] = useState<Grade | null>(null);
   const [flashed, setFlashed] = useState(false);
 
   const [increasePts, setIncreasePts] = useState(0);
 
-  useEffect(() => {
-    let points = 0;
-    switch (grade) {
-      case "green":
-        points = 1;
-        break;
-      case "orange":
-        points = 4;
-        break;
-      case "blue":
-        points = 10;
-        break;
-      case "white":
-        points = 25;
-        break;
-    }
-
-    if (flashed) points *= 2;
-
-    setIncreasePts(points);
-  }, [grade, flashed]);
+  useEffect(
+    () => setIncreasePts(calculatePointsForClimb(grade, flashed)),
+    [grade, flashed],
+  );
 
   return (
     <SecondaryDiv className="relative rounded-2xl flex flex-col justify-start items-center p-10 gap-5">
-      <TertiaryDiv className="relative flex flex-col justify-center items-center rounded-2xl min-w-50 p-5 ">
+      <TertiaryDiv className="relative flex flex-col justify-center items-center rounded-2xl w-full p-5 ">
         <h1 className="text-xl text-center font-bold">Points</h1>
-        <p className="relative z-0 text-center font-bold text-8xl">{0}</p>
+        <ChangingLabel
+          className="relative z-0 text-center font-bold text-8xl"
+          text={points.toString()}
+        />
         <ChangingLabel
           className="absolute z-1 font-bold right-5 bottom-5 text-2xl text-right text-positive-primary"
           text={increasePts > 0 ? `+${increasePts}` : undefined}
@@ -101,8 +89,19 @@ export default function HomePanel() {
             <i className="font-normal text-font-secondary">(x2 points)</i>
           </p>
         </div>
-        <BooleanSwitch onSwitch={(v) => setFlashed(v)} />
+        <BooleanSwitch
+          overrideValue={flashed}
+          onSwitch={(v) => setFlashed(v)}
+        />
       </TertiaryDiv>
+      <AddButton
+        onClick={() => {
+          setPoints((l) => l + calculatePointsForClimb(grade, flashed));
+          setIncreasePts(0);
+          setGrade(null);
+          setFlashed(false);
+        }}
+      />
     </SecondaryDiv>
   );
 }
@@ -153,5 +152,57 @@ export function GradeButton({
         onClick={onSelect}
       />
     </span>
+  );
+}
+
+export function AddButton({
+  onClick,
+  color = "var(--bg-tertiary)",
+}: {
+  onClick?: () => void;
+  color?: string;
+}) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const initialLoad = useRef(true);
+  const [mouseEntered, setMouseEntered] = useState(false);
+  const [mouseDown, setMouseDown] = useState(false);
+
+  useGSAP(() => {
+    const button = ref.current!;
+    const targetColor = resolveCssColor(color, button);
+    if (initialLoad.current) {
+      gsap.set(button, {
+        backgroundColor: targetColor,
+      });
+      return;
+    }
+    gsap.to(button, {
+      backgroundColor: targetColor,
+      ease: "sine.inOut",
+      duration: 0.5,
+    });
+  }, [color]);
+
+  useGSAP(() => {
+    const button = ref.current!;
+    gsap.to(button, {
+      scale: (mouseEntered ? 1.25 : 1) * (mouseDown ? 0.8 : 1),
+      ease: "power1.inOut",
+      duration: 0.1,
+    });
+  }, [mouseEntered, mouseDown]);
+
+  return (
+    <button
+      ref={ref}
+      onClick={onClick}
+      className="relative select-none place-items-center p-5 rounded-full aspect-square text-3xl ring-1 ring-black/10 bg-bg-tertiary shadow-md/5"
+      onMouseEnter={() => setMouseEntered(true)}
+      onMouseLeave={() => setMouseEntered(false)}
+      onMouseDown={() => setMouseDown(true)}
+      onMouseUp={() => setMouseDown(false)}
+    >
+      <GrTableAdd />
+    </button>
   );
 }

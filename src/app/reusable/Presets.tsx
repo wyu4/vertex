@@ -114,6 +114,7 @@ export const BooleanSwitch = forwardRef<
     defaultValue?: boolean;
     positiveColor?: string;
     negativeColor?: string;
+    overrideValue?: boolean;
     onSwitch?: (value: boolean) => void;
   }
 >(
@@ -123,6 +124,7 @@ export const BooleanSwitch = forwardRef<
       defaultValue = false,
       positiveColor = "var(--positive-primary)",
       negativeColor = "var(--negative-primary)",
+      overrideValue,
       onSwitch,
       ...props
     },
@@ -158,11 +160,17 @@ export const BooleanSwitch = forwardRef<
       });
     }, [value]);
 
+    useEffect(() => {
+      if (overrideValue === undefined) return;
+      setValue(overrideValue);
+    }, [overrideValue]);
+
     return (
       <button
         ref={(n) => bindRefAndForwardRef(n, fref, ref)}
         onClick={() => {
           onSwitch?.(!value);
+          if (overrideValue !== undefined) return;
           setValue((v) => !v);
         }}
         {...props}

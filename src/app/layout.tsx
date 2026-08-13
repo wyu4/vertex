@@ -5,6 +5,7 @@ import "./global.css";
 const stackSans = Stack_Sans_Text({
   variable: "--stack-sans",
   subsets: ["latin"],
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
