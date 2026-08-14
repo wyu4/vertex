@@ -10,7 +10,7 @@ import {
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { FaBoltLightning } from "react-icons/fa6";
-import { GrScorecard, GrTableAdd } from "react-icons/gr";
+import { GrScorecard, GrTableAdd, GrTrophy } from "react-icons/gr";
 import { resolveCssColor } from "@/utils/animation-helpers";
 import {
   calculatePointsForClimb,
@@ -35,20 +35,25 @@ export default function HomePanel() {
 
   return (
     <SecondaryDiv className="relative rounded-2xl flex flex-col justify-start items-center p-10 gap-5">
-      <TertiaryDiv className="relative flex flex-row justify-around items-start flex-nowrap gap-2 rounded-2xl w-full p-5">
-        <div className="w-60 relative flex flex-col justify-center items-center ">
-          <h1 className="text-xl text-center font-bold">Points</h1>
+      <TertiaryDiv className="relative flex flex-col w-full justify-center items-center rounded-2xl p-5 gap-2">
+        <div className="text-2xl font-bold flex flex-col justify-center items-center gap-2">
+          <GrTrophy className="text-xl" />
+          <h1>Points</h1>
+        </div>
+
+        <div className="relative">
           <ChangingLabel
-            className="relative z-0 text-center font-bold text-8xl"
+            className="text-center font-bold text-8xl leading-none"
             text={calculateTotalPoints(currentRecord).toString()}
           />
           <ChangingLabel
-            className="absolute z-1 font-bold right-0 bottom-0 text-2xl text-center text-positive-primary p-1 bg-linear-to-tl from-0% from-bg-tertiary to-bg-tertiary/0 rounded-sm"
+            className="absolute left-full bottom-1 ml-2 font-bold text-2xl text-positive-primary"
             text={increasePts > 0 ? `+${increasePts}` : undefined}
             easeTime={0.15}
           />
         </div>
-        <div className="w-20 flex flex-col justify-center items-start ">
+
+        <div className="grid grid-cols-6 w-full gap-2 pt-3 border-t border-font-tertiary/15">
           <GradeCounter color="var(--grade-pink)" count={currentRecord.pink} />
           <GradeCounter
             color="var(--grade-yellow)"
@@ -152,13 +157,13 @@ function GradeCounter({
   count?: GradeRecord;
 }) {
   return (
-    <div className="relative flex flex-row gap-1 justify-start items-center">
+    <div className="relative flex flex-row gap-1.5 justify-center items-center">
       <div
         className="relative aspect-square h-3 rounded-full ring-1 ring-black/20"
         style={{ backgroundColor: color }}
       />
       <ChangingLabel
-        className="text-sm"
+        className="text-sm font-medium leading-none"
         text={(count.regular + count.flashed).toString()}
       />
     </div>

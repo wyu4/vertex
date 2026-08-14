@@ -3,6 +3,7 @@
 :root {
   --bg-primary: #dbdbdb;
   --bg-secondary: #f1f1f1;
+
   --bg-tertiary: #fafafa;
 
   --font-primary: #0d0d0d;
@@ -12,12 +13,14 @@
   --positive-primary: #51a885;
   --negative-primary: #d16464;
 
-  --grade-pink: #ac5380;
-  --grade-yellow: #ac9d53;
-  --grade-green: #53ac71;
-  --grade-orange: #ac8053;
-  --grade-blue: #5380ac;
-  --grade-white: #efece3;
+  /* Saturated on purpose: the greys and the positive/negative pair stay muted
+     so the hold colours are the only thing on screen that reads as colour. */
+  --grade-pink: #c43176;
+  --grade-yellow: #bf9a22;
+  --grade-green: #2e9e5d;
+  --grade-orange: #ce6c22;
+  --grade-blue: #337acc;
+  --grade-white: #ede6d4;
 }
 
 @theme inline {

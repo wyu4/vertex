@@ -11,7 +11,6 @@ export default function LoginPanel() {
   const router = useRouter();
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
   const nameFieldRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
@@ -29,21 +28,6 @@ export default function LoginPanel() {
   const isLogin = mode === "login";
 
   const { contextSafe } = useGSAP({ scope: containerRef });
-
-  // Entrance animation, once on mount.
-  useGSAP(() => {
-    gsap.from(containerRef.current, {
-      opacity: 0,
-      y: 24,
-      duration: 0.6,
-      ease: "power3.out",
-    });
-    gsap.fromTo(
-      cardRef.current,
-      { opacity: 0, y: 12 },
-      { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" },
-    );
-  }, []);
 
   // Slide/fade the extra "Name" field in when switching to register.
   useGSAP(
@@ -132,10 +116,7 @@ export default function LoginPanel() {
         ref={containerRef}
         className="relative rounded-2xl flex flex-col justify-start items-center p-10 gap-5"
       >
-        <TertiaryDiv
-          ref={cardRef}
-          className="relative flex flex-col justify-center items-center rounded-2xl min-w-70 p-10 gap-3 text-center"
-        >
+        <TertiaryDiv className="relative flex flex-col justify-center items-center rounded-2xl min-w-70 p-10 gap-3 text-center">
           <h1 className="text-xl font-bold">Check your email</h1>
           <p className="text-font-secondary text-sm">
             We sent a verification link to{" "}
@@ -172,10 +153,7 @@ export default function LoginPanel() {
         />
       </TertiaryDiv>
 
-      <TertiaryDiv
-        ref={cardRef}
-        className="relative flex flex-col justify-center items-stretch rounded-2xl p-10 gap-4 min-w-70"
-      >
+      <TertiaryDiv className="relative flex flex-col justify-center items-stretch rounded-2xl p-10 gap-4 min-w-70">
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {!isLogin && (
             <input

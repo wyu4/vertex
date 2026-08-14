@@ -1,7 +1,7 @@
 import { ButtonType, DivType, PType } from "@/types/global";
 import { bindRefAndForwardRef } from "@/utils/ref-helpers";
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { useTimelineRef } from "../hooks/Animation";
+import { useFadeIn, useTimelineRef } from "../hooks/Animation";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { TextPlugin } from "gsap/all";
@@ -9,20 +9,42 @@ import { resolveCssColor } from "@/utils/animation-helpers";
 
 gsap.registerPlugin(TextPlugin);
 
-export const SecondaryDiv = forwardRef<HTMLDivElement, DivType>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={`bg-bg-secondary ${className}`} {...props} />
-  ),
+type AnimatedDivType = DivType & { disableAnimation?: boolean };
+
+export const SecondaryDiv = forwardRef<HTMLDivElement, AnimatedDivType>(
+  ({ className, disableAnimation = false, ...props }, fref) => {
+    const ref = useRef<HTMLDivElement>(null);
+    useFadeIn(ref, { disabled: disableAnimation });
+
+    return (
+      <div
+        ref={(n) => bindRefAndForwardRef(n, fref, ref)}
+        className={`bg-bg-secondary ${className}`}
+        {...props}
+      />
+    );
+  },
 );
 
-export const TertiaryDiv = forwardRef<HTMLDivElement, DivType>(
-  ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={`bg-bg-tertiary shadow-md/5 ${className}`}
-      {...props}
-    />
-  ),
+export const TertiaryDiv = forwardRef<HTMLDivElement, AnimatedDivType>(
+  ({ className, disableAnimation = false, ...props }, fref) => {
+    const ref = useRef<HTMLDivElement>(null);
+    useFadeIn(ref, {
+      disabled: disableAnimation,
+      offsetY: 12,
+      duration: 0.35,
+      delay: 0.3,
+      ease: "power2.out",
+    });
+
+    return (
+      <div
+        ref={(n) => bindRefAndForwardRef(n, fref, ref)}
+        className={`bg-bg-tertiary shadow-md/5 ${className}`}
+        {...props}
+      />
+    );
+  },
 );
 
 export const ChangingLabel = forwardRef<
@@ -48,14 +70,14 @@ export const ChangingLabel = forwardRef<
     fref,
   ) => {
     const ref = useRef<HTMLParagraphElement>(null);
-    const displayed = useRef<string>(null);
+    const displayedText = useRef<string>(null);
+    const initialText = useRef(text).current;
 
     const timeline = useTimelineRef();
 
     useGSAP(() => {
-      if (!displayed.current) {
+      if (displayedText.current === null) {
         gsap.set(ref.current, {
-          text: "notext",
           x: offsetX,
           y: offsetY,
           opacity: 0,
@@ -68,7 +90,7 @@ export const ChangingLabel = forwardRef<
         return;
       }
 
-      if (text === displayed.current) return;
+      if (text === displayedText.current) return;
 
       tl.to(ref.current, {
         delay: delayTime,
@@ -80,7 +102,7 @@ export const ChangingLabel = forwardRef<
       })
         .set(ref.current, { text: text })
         .call(() => {
-          displayed.current = text;
+          displayedText.current = text;
         })
         .to(ref.current, {
           x: 0,
@@ -92,7 +114,7 @@ export const ChangingLabel = forwardRef<
       tl.play();
       return () => {
         tl.clear();
-        tl.pause;
+        tl.pause();
       };
     }, [text, offsetX, offsetY]);
 
@@ -102,7 +124,7 @@ export const ChangingLabel = forwardRef<
         className={`opacity-0 ${className}`}
         {...props}
       >
-        {"notext"}
+        {initialText || "​"}
       </p>
     );
   },
