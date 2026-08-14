@@ -11,7 +11,7 @@ export default async function Home() {
   const loggedIn = result !== null;
   if (!loggedIn) redirect("/login");
   return (
-    <div className="relative min-w-full min-h-screen bg-bg-primary flex flex-col items-center justify-center p-10 gap-5">
+    <div className="absolute w-full h-screen overflow-clip bg-bg-primary flex flex-col items-center justify-center p-10 gap-5">
       <HomePanel />
     </div>
   );

@@ -34,9 +34,9 @@ export default function HomePanel() {
   );
 
   return (
-    <SecondaryDiv className="relative rounded-2xl flex flex-col justify-start items-center p-10 gap-5">
+    <SecondaryDiv className="relative rounded-2xl flex flex-col justify-start items-center p-5 md:p-10 gap-2 md:gap-5">
       <TertiaryDiv className="relative flex flex-col w-full justify-center items-center rounded-2xl p-5 gap-2">
-        <div className="text-2xl font-bold flex flex-col justify-center items-center gap-2">
+        <div className="text-xl md:text-2xl font-bold flex flex-col justify-center items-center gap-2">
           <GrTrophy className="text-xl" />
           <h1>Points</h1>
         </div>
@@ -53,7 +53,7 @@ export default function HomePanel() {
           />
         </div>
 
-        <div className="grid grid-cols-6 w-full gap-2 pt-3 border-t border-font-tertiary/15">
+        <div className="flex flex-row flex-nowrap justify-around items-center w-full gap-2 pt-3 border-t border-font-tertiary/15">
           <GradeCounter color="var(--grade-pink)" count={currentRecord.pink} />
           <GradeCounter
             color="var(--grade-yellow)"
@@ -75,12 +75,12 @@ export default function HomePanel() {
         </div>
       </TertiaryDiv>
       <TertiaryDiv className="relative flex flex-col w-full justify-center items-center rounded-2xl p-5 gap-2">
-        <div className="text-2xl font-bold flex flex-row justify-center items-center gap-2">
+        <div className="text-xl md:text-2xl font-bold flex flex-row justify-center items-center gap-2">
           <GrScorecard className="text-xl" />
           <h1>Grade</h1>
         </div>
 
-        <div className="relative h-10 flex flex-row justify-center items-center flex-nowrap gap-5">
+        <div className="relative h-10 flex flex-row justify-center items-center flex-nowrap gap-4 md:gap-5">
           <GradeButton
             color="var(--grade-pink)"
             selected={grade === "pink"}
@@ -157,7 +157,7 @@ function GradeCounter({
   count?: GradeRecord;
 }) {
   return (
-    <div className="relative flex flex-row gap-1.5 justify-center items-center">
+    <div className="relative flex flex-col md:flex-row gap-1.5 justify-center items-center">
       <div
         className="relative aspect-square h-3 rounded-full ring-1 ring-black/20"
         style={{ backgroundColor: color }}
@@ -200,7 +200,7 @@ export function GradeButton({
   return (
     <span
       ref={container}
-      className="relative bg-bg-secondary rounded-xl overflow-clip place-items-center w-10 h-5 shadow-lg shadow-font-primary/20 ring-1 ring-black/10"
+      className="relative bg-bg-secondary rounded-xl overflow-clip place-items-center w-7 md:w-10 h-5 shadow-lg shadow-font-primary/20 ring-1 ring-black/10"
     >
       <button
         ref={ref}
@@ -254,7 +254,7 @@ export function AddButton({
     <button
       ref={ref}
       onClick={onClick}
-      className="relative select-none place-items-center p-5 rounded-full aspect-square text-3xl ring-1 ring-black/10 bg-bg-tertiary shadow-md/5"
+      className="relative select-none place-items-center p-5 rounded-full aspect-square text-2xl md:text-3xl ring-1 ring-black/10 bg-bg-tertiary shadow-md/5"
       onMouseEnter={() => setMouseEntered(true)}
       onMouseLeave={() => setMouseEntered(false)}
       onMouseDown={() => setMouseDown(true)}
