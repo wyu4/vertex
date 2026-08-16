@@ -1,11 +1,13 @@
 "use client";
 
-import { SubmitEventHandler, useRef, useState } from "react";
+import { SubmitEventHandler, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ChangingLabel, SecondaryDiv, TertiaryDiv } from "../reusable/Presets";
 import { signIn, signUp, sendVerificationEmail } from "@/utils/auth/client";
+import { deleteCookie } from "cookies-next/client";
+import { CACHE_KEY } from "@/utils/data/cache";
 
 export default function LoginPanel() {
   const router = useRouter();
@@ -28,6 +30,8 @@ export default function LoginPanel() {
   const isLogin = mode === "login";
 
   const { contextSafe } = useGSAP({ scope: containerRef });
+
+  useEffect(() => deleteCookie(CACHE_KEY), []);
 
   // Slide/fade the extra "Name" field in when switching to register.
   useGSAP(

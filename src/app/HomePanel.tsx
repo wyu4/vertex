@@ -23,27 +23,34 @@ import {
   calculateTotalPoints,
   createEmptySessionRecord,
 } from "@/utils/data/universal";
-import { Grade, GradeRecord } from "@/types/data";
+import { Grade, GradeRecord, SessionRecord } from "@/types/data";
 import { useFadeIn } from "./hooks/Animation";
 import { useBooleanPopup } from "./hooks/Popup";
 import { uploadRecord } from "@/utils/data/server";
+import { setCookie } from "cookies-next/client";
+import { CACHE_AGE_SECONDS, CACHE_KEY } from "@/utils/data/cache";
 
-export default function HomePanel() {
+export default function HomePanel({
+  cachedRecord,
+}: {
+  cachedRecord?: SessionRecord;
+}) {
   const lineRef = useRef<HTMLDivElement>(null);
 
   const [currentRecord, setCurrentRecord] = useState(
-    createEmptySessionRecord(),
+    cachedRecord ?? createEmptySessionRecord(),
   );
   const [grade, setGrade] = useState<Grade | null>(null);
   const [flashed, setFlashed] = useState(false);
-
   const [totalPoints, setTotalPoints] = useState(0);
   const [increasePts, setIncreasePts] = useState(0);
 
-  useEffect(
-    () => setTotalPoints(calculateTotalPoints(currentRecord)),
-    [currentRecord],
-  );
+  useEffect(() => {
+    setTotalPoints(calculateTotalPoints(currentRecord));
+    setCookie(CACHE_KEY, JSON.stringify(currentRecord), {
+      maxAge: CACHE_AGE_SECONDS,
+    });
+  }, [currentRecord]);
 
   useEffect(
     () => setIncreasePts(calculatePointsForClimb(grade, flashed)),

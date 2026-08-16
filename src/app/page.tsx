@@ -1,20 +1,29 @@
 "use server";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import HomePanel from "./HomePanel";
 import { auth } from "@/utils/auth/server";
 import { redirect } from "next/navigation";
 import TopBar from "./reusable/TopBar";
-
+import { parseStringifiedSession } from "@/utils/data/universal";
+import { CACHE_KEY } from "@/utils/data/cache";
 export default async function Home() {
   const result = await auth.api.getSession({ headers: await headers() });
 
-  const loggedIn = result !== null;
-  if (!loggedIn) redirect("/login");
+  if (result === null) redirect("/login");
+
+  const cachedData = (await cookies()).get(CACHE_KEY)?.value;
+
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center p-10 gap-5">
       <TopBar />
-      <HomePanel />
+      <HomePanel
+        cachedRecord={
+          cachedData === undefined
+            ? undefined
+            : parseStringifiedSession(cachedData)
+        }
+      />
     </div>
   );
 }
