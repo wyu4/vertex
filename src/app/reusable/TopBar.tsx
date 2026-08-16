@@ -26,7 +26,7 @@ export default function TopBar({
   return (
     <div
       ref={ref}
-      className="fixed top-0 left-0 w-full overflow-clip bg-linear-to-b from-0% from-bg-primary to-bg-tertiary/50 backdrop-blur-md h-15"
+      className="fixed top-0 left-0 z-90 w-full overflow-clip bg-linear-to-b from-0% from-bg-primary to-bg-tertiary/50 backdrop-blur-md h-15"
     >
       <div></div>
       <div></div>
