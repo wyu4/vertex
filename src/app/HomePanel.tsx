@@ -74,7 +74,7 @@ export default function HomePanel({
   return (
     <>
       {popupComponent}
-      <SecondaryDiv className="relative rounded-2xl flex flex-col justify-start items-center p-5 md:p-10 gap-2 md:gap-5">
+      <SecondaryDiv className="relative mt-10 rounded-2xl flex flex-col justify-start items-center p-5 md:p-10 gap-2 md:gap-5">
         <SessionDiv
           totalPointsOverride={totalPoints}
           record={currentRecord}
@@ -137,7 +137,7 @@ export default function HomePanel({
             onSwitch={(v) => setFlashed(v)}
           />
         </TertiaryDiv>
-        <div className="relative w-full flex flex-row justify-between items-center">
+        <div className="relative mt-5 w-full flex flex-row justify-between items-center">
           <HomeButton
             onClick={() =>
               triggerPopup(

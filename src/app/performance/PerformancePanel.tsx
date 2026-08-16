@@ -41,7 +41,7 @@ export default function PerformancePanel() {
           <GrHistory className="text-xl" />
           <h1>Total Points</h1>
         </SessionDiv>
-        <div className="relative w-full flex flex-col gap-1 md:gap-2">
+        <div className="relative mt-5 w-full flex flex-col gap-1 md:gap-2">
           <div className="relative w-full flex flex-row justify-between items-center rounded-2xl gap-2">
             <h2 className="font-bold">Timestamp</h2>
             <p className="font-bold">Points</p>

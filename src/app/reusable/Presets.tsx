@@ -95,23 +95,11 @@ export const SessionDiv = forwardRef<
 
         <div className="flex flex-row flex-nowrap justify-around items-center w-full gap-10 pt-3 border-t border-font-tertiary/15">
           <GradeCounter color="var(--grade-pink)" count={record.pink} />
-          <GradeCounter
-            color="var(--grade-yellow)"
-            count={record.yellow}
-          />
-          <GradeCounter
-            color="var(--grade-green)"
-            count={record.green}
-          />
-          <GradeCounter
-            color="var(--grade-orange)"
-            count={record.orange}
-          />
+          <GradeCounter color="var(--grade-yellow)" count={record.yellow} />
+          <GradeCounter color="var(--grade-green)" count={record.green} />
+          <GradeCounter color="var(--grade-orange)" count={record.orange} />
           <GradeCounter color="var(--grade-blue)" count={record.blue} />
-          <GradeCounter
-            color="var(--grade-white)"
-            count={record.white}
-          />
+          <GradeCounter color="var(--grade-white)" count={record.white} />
         </div>
       </TertiaryDiv>
     );

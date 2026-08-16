@@ -4,6 +4,7 @@ import { auth } from "@/utils/auth/server";
 import { redirect } from "next/navigation";
 import LoginPanel from "./LoginPanel";
 import { headers } from "next/headers";
+import { CopyrightP } from "../reusable/Copyright";
 
 export default async function Home() {
   const result = await auth.api.getSession({ headers: await headers() });
@@ -13,6 +14,7 @@ export default async function Home() {
   return (
     <div className="relative min-w-full min-h-screen bg-bg-primary flex flex-col items-center justify-center p-10 gap-5">
       <LoginPanel />
+      <CopyrightP />
     </div>
   );
 }
