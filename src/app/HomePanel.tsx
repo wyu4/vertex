@@ -193,7 +193,18 @@ export default function HomePanel() {
           >
             <GrTableAdd />
           </HomeButton>
-          <HomeButton color="var(--positive-primary)" fadeInDelay={0.75}>
+          <HomeButton
+            color="var(--positive-primary)"
+            fadeInDelay={0.75}
+            onClick={() =>
+              triggerPopup(
+                "Confirm Save",
+                "Are you sure you want to save your session? This will upload and clear your current data.",
+                undefined,
+                undefined,
+              )
+            }
+          >
             <GrCloudUpload className="text-bg-tertiary" />
           </HomeButton>
           <div
@@ -307,7 +318,7 @@ function HomeButton({
   useGSAP(() => {
     const button = ref.current!;
     gsap.to(button, {
-      scale: (mouseEntered ? 1.25 : 1) * (mouseDown ? 0.8 : 1),
+      scale: (mouseEntered ? 1.25 : 1) * (mouseDown ? 0.7 : 1),
       ease: "power1.inOut",
       duration: 0.1,
     });
@@ -319,7 +330,10 @@ function HomeButton({
       onClick={onClick}
       className="relative z-5 select-none place-items-center p-5 rounded-full aspect-square text-2xl md:text-3xl ring-1 ring-black/10 bg-bg-tertiary shadow-md/5"
       onMouseEnter={() => setMouseEntered(true)}
-      onMouseLeave={() => setMouseEntered(false)}
+      onMouseLeave={() => {
+        setMouseEntered(false);
+        setMouseDown(false);
+      }}
       onMouseDown={() => setMouseDown(true)}
       onMouseUp={() => setMouseDown(false)}
     >
