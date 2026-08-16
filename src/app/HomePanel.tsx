@@ -30,6 +30,7 @@ import { useBooleanPopup } from "./hooks/Popup";
 import { uploadRecord } from "@/utils/data/server";
 import { setCookie } from "cookies-next/client";
 import { CACHE_AGE_SECONDS, CACHE_KEY } from "@/utils/data/cache";
+import { redirect } from "next/navigation";
 
 export default function HomePanel({
   cachedRecord,
@@ -183,6 +184,7 @@ export default function HomePanel({
                   uploadRecord(currentRecord).then((status) => {
                     if (status) {
                       trashFunction();
+                      redirect("/performance");
                     }
                   });
                 },
