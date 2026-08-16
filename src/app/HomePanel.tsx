@@ -5,6 +5,7 @@ import {
   BooleanSwitch,
   ChangingLabel,
   SecondaryDiv,
+  SessionDiv,
   TertiaryDiv,
 } from "./reusable/Presets";
 import { useGSAP } from "@gsap/react";
@@ -74,51 +75,14 @@ export default function HomePanel({
     <>
       {popupComponent}
       <SecondaryDiv className="relative rounded-2xl flex flex-col justify-start items-center p-5 md:p-10 gap-2 md:gap-5">
-        <TertiaryDiv className="relative flex flex-col w-full justify-center items-center rounded-2xl p-5 gap-2">
-          <div className="text-xl md:text-2xl font-bold flex flex-col justify-center items-center gap-2">
-            <GrTrophy className="text-xl" />
-            <h1>Points</h1>
-          </div>
-
-          <div className="relative">
-            <ChangingLabel
-              className="text-center font-bold text-8xl leading-none"
-              text={totalPoints.toString()}
-            />
-            <ChangingLabel
-              className="absolute left-full bottom-1 ml-2 font-bold text-2xl text-positive-primary"
-              text={increasePts > 0 ? `+${increasePts}` : undefined}
-              easeTime={0.15}
-            />
-          </div>
-
-          <div className="flex flex-row flex-nowrap justify-around items-center w-full gap-2 pt-3 border-t border-font-tertiary/15">
-            <GradeCounter
-              color="var(--grade-pink)"
-              count={currentRecord.pink}
-            />
-            <GradeCounter
-              color="var(--grade-yellow)"
-              count={currentRecord.yellow}
-            />
-            <GradeCounter
-              color="var(--grade-green)"
-              count={currentRecord.green}
-            />
-            <GradeCounter
-              color="var(--grade-orange)"
-              count={currentRecord.orange}
-            />
-            <GradeCounter
-              color="var(--grade-blue)"
-              count={currentRecord.blue}
-            />
-            <GradeCounter
-              color="var(--grade-white)"
-              count={currentRecord.white}
-            />
-          </div>
-        </TertiaryDiv>
+        <SessionDiv
+          totalPointsOverride={totalPoints}
+          record={currentRecord}
+          increasePts={increasePts}
+        >
+          <GrTrophy className="text-xl" />
+          <h1>Points</h1>
+        </SessionDiv>
         <TertiaryDiv className="relative flex flex-col w-full justify-center items-center rounded-2xl p-5 gap-2">
           <div className="text-xl md:text-2xl font-bold flex flex-row justify-center items-center gap-2">
             <GrScorecard className="text-xl" />
@@ -236,27 +200,6 @@ export default function HomePanel({
         </div>
       </SecondaryDiv>
     </>
-  );
-}
-
-function GradeCounter({
-  color,
-  count = { regular: 0, flashed: 0 },
-}: {
-  color: string;
-  count?: GradeRecord;
-}) {
-  return (
-    <div className="relative flex flex-col md:flex-row gap-1.5 justify-center items-center">
-      <div
-        className="relative aspect-square h-3 rounded-full ring-1 ring-black/20"
-        style={{ backgroundColor: color }}
-      />
-      <ChangingLabel
-        className="text-sm font-medium leading-none"
-        text={(count.regular + count.flashed).toString()}
-      />
-    </div>
   );
 }
 

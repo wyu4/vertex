@@ -6,6 +6,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { TextPlugin } from "gsap/all";
 import { resolveCssColor } from "@/utils/animation-helpers";
+import { GradeRecord, SessionRecord } from "@/types/data";
+import { calculateTotalPoints } from "@/utils/data/universal";
 
 gsap.registerPlugin(TextPlugin);
 
@@ -46,6 +48,96 @@ export const TertiaryDiv = forwardRef<HTMLDivElement, AnimatedDivType>(
     );
   },
 );
+
+export const SessionDiv = forwardRef<
+  HTMLDivElement,
+  AnimatedDivType & {
+    record: SessionRecord;
+    totalPointsOverride?: number;
+    increasePts: number;
+  }
+>(
+  (
+    { className, totalPointsOverride, increasePts, record, children, ...props },
+    ref,
+  ) => {
+    const [totalPoints, setTotalPoints] = useState(0);
+
+    useEffect(() => {
+      if (totalPointsOverride !== undefined) {
+        setTotalPoints(totalPointsOverride);
+        return;
+      }
+      setTotalPoints(calculateTotalPoints(record));
+    }, [totalPointsOverride, record]);
+
+    return (
+      <TertiaryDiv
+        className="relative flex flex-col w-full justify-center items-center rounded-2xl p-5 gap-2"
+        ref={ref}
+        {...props}
+      >
+        <div className="text-xl md:text-2xl font-bold flex flex-col justify-center items-center gap-2">
+          {children}
+        </div>
+
+        <div className="relative">
+          <ChangingLabel
+            className="text-center font-bold text-8xl leading-none"
+            text={totalPoints.toString()}
+          />
+          <ChangingLabel
+            className="absolute left-full bottom-1 ml-2 font-bold text-2xl text-positive-primary"
+            text={increasePts > 0 ? `+${increasePts}` : undefined}
+            easeTime={0.15}
+          />
+        </div>
+
+        <div className="flex flex-row flex-nowrap justify-around items-center w-full gap-10 pt-3 border-t border-font-tertiary/15">
+          <GradeCounter color="var(--grade-pink)" count={record.pink} />
+          <GradeCounter
+            color="var(--grade-yellow)"
+            count={record.yellow}
+          />
+          <GradeCounter
+            color="var(--grade-green)"
+            count={record.green}
+          />
+          <GradeCounter
+            color="var(--grade-orange)"
+            count={record.orange}
+          />
+          <GradeCounter color="var(--grade-blue)" count={record.blue} />
+          <GradeCounter
+            color="var(--grade-white)"
+            count={record.white}
+          />
+        </div>
+      </TertiaryDiv>
+    );
+  },
+);
+
+function GradeCounter({
+  color,
+  count = { regular: 0, flashed: 0 },
+}: {
+  color: string;
+  count?: GradeRecord;
+}) {
+  return (
+    <div className="relative flex flex-col md:flex-row gap-1.5 justify-center items-center">
+      <div
+        className="relative aspect-square h-3 rounded-full ring-1 ring-black/20"
+        style={{ backgroundColor: color }}
+      />
+      <ChangingLabel
+        className="text-sm font-medium leading-none"
+        text={(count.regular + count.flashed).toString()}
+      />
+    </div>
+  );
+}
 
 export const ChangingLabel = forwardRef<
   HTMLParagraphElement,

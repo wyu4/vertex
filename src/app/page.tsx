@@ -16,7 +16,7 @@ export default async function Home() {
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center p-10 gap-5">
-      <TopBar />
+      <TopBar currentPage="home" />
       <HomePanel
         cachedRecord={
           cachedData === undefined
