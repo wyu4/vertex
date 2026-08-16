@@ -26,6 +26,7 @@ import {
 import { Grade, GradeRecord } from "@/types/data";
 import { useFadeIn } from "./hooks/Animation";
 import { useBooleanPopup } from "./hooks/Popup";
+import { uploadRecord } from "@/utils/data/server";
 
 export default function HomePanel() {
   const lineRef = useRef<HTMLDivElement>(null);
@@ -36,7 +37,13 @@ export default function HomePanel() {
   const [grade, setGrade] = useState<Grade | null>(null);
   const [flashed, setFlashed] = useState(false);
 
+  const [totalPoints, setTotalPoints] = useState(0);
   const [increasePts, setIncreasePts] = useState(0);
+
+  useEffect(
+    () => setTotalPoints(calculateTotalPoints(currentRecord)),
+    [currentRecord],
+  );
 
   useEffect(
     () => setIncreasePts(calculatePointsForClimb(grade, flashed)),
@@ -69,7 +76,7 @@ export default function HomePanel() {
           <div className="relative">
             <ChangingLabel
               className="text-center font-bold text-8xl leading-none"
-              text={calculateTotalPoints(currentRecord).toString()}
+              text={totalPoints.toString()}
             />
             <ChangingLabel
               className="absolute left-full bottom-1 ml-2 font-bold text-2xl text-positive-primary"
@@ -170,6 +177,7 @@ export default function HomePanel() {
               )
             }
             fadeInDelay={0.75}
+            disabled={totalPoints <= 0}
           >
             <GrTrash className="text-negative-primary" />
           </HomeButton>
@@ -200,10 +208,17 @@ export default function HomePanel() {
               triggerPopup(
                 "Confirm Save",
                 "Are you sure you want to save your session? This will upload and clear your current data.",
-                undefined,
+                () => {
+                  uploadRecord(currentRecord).then((status) => {
+                    if (status) {
+                      trashFunction();
+                    }
+                  });
+                },
                 undefined,
               )
             }
+            disabled={totalPoints <= 0}
           >
             <GrCloudUpload className="text-bg-tertiary" />
           </HomeButton>
@@ -286,11 +301,13 @@ function HomeButton({
   color = "var(--bg-tertiary)",
   children,
   fadeInDelay = 0,
+  disabled = false,
 }: {
   onClick?: () => void;
   color?: string;
   children?: ReactNode;
   fadeInDelay?: number;
+  disabled?: boolean;
 }) {
   const ref = useRef<HTMLButtonElement>(null);
   const initialLoad = useRef(true);
@@ -316,18 +333,28 @@ function HomeButton({
   }, [color]);
 
   useGSAP(() => {
-    const button = ref.current!;
-    gsap.to(button, {
+    gsap.to(ref.current, {
       scale: (mouseEntered ? 1.25 : 1) * (mouseDown ? 0.7 : 1),
       ease: "power1.inOut",
       duration: 0.1,
     });
   }, [mouseEntered, mouseDown]);
 
+  useGSAP(() => {
+    gsap.to(ref.current, {
+      filter: disabled ? "brightness(40%)" : "brightness(100%)",
+      ease: "sine.inOut",
+      duration: 0.5,
+    });
+  }, [disabled]);
+
   return (
     <button
       ref={ref}
-      onClick={onClick}
+      onClick={() => {
+        if (disabled) return;
+        onClick?.();
+      }}
       className="relative z-5 select-none place-items-center p-5 rounded-full aspect-square text-2xl md:text-3xl ring-1 ring-black/10 bg-bg-tertiary shadow-md/5"
       onMouseEnter={() => setMouseEntered(true)}
       onMouseLeave={() => {
@@ -336,6 +363,7 @@ function HomeButton({
       }}
       onMouseDown={() => setMouseDown(true)}
       onMouseUp={() => setMouseDown(false)}
+      disabled={disabled}
     >
       {children}
     </button>

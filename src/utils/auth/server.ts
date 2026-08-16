@@ -2,7 +2,13 @@ import { betterAuth } from "better-auth";
 import { firestoreAdapter, initFirestore } from "better-auth-firestore";
 import { Resend } from "resend";
 import { headers } from "next/headers";
-import { FirebaseCert } from "../data/server";
+import { cert } from "firebase-admin/app";
+
+export const FirebaseCert = cert({
+  projectId: process.env.FIREBASE_PROJECT_ID!,
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
+  privateKey: process.env.FIREBASE_PRIVATE_KEY!.replace(/\\n/g, "\n"),
+});
 
 const firestore = initFirestore({
   credential: FirebaseCert,

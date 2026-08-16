@@ -1,4 +1,4 @@
-import { Grade, SessionRecord } from "@/types/data";
+import { Grade, GradeRecord, SessionRecord } from "@/types/data";
 
 export const GRADES = [
   "pink",
@@ -64,4 +64,25 @@ export function createEmptySessionRecord(): SessionRecord {
     acc[grade] = { regular: 0, flashed: 0 };
     return acc;
   }, {} as SessionRecord);
+}
+
+export function parseStringifiedSession(session: string) {
+  const parsedSession = JSON.parse(session) as Record<
+    string,
+    string | GradeRecord
+  >;
+  let result = createEmptySessionRecord();
+  for (const [grade, value] of Object.entries(parsedSession)) {
+    if (!(GRADES as readonly string[]).includes(grade)) {
+      continue;
+    }
+    const gradeRecord = (
+      typeof value === "string" ? JSON.parse(value) : value
+    ) as GradeRecord;
+    gradeRecord.flashed = gradeRecord.flashed ?? 0;
+    gradeRecord.regular = gradeRecord.regular ?? 0;
+
+    result[grade as Grade] = gradeRecord;
+  }
+  return result;
 }
