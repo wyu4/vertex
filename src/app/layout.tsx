@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Stack_Sans_Text } from "next/font/google";
-import "./global.css";
+import "./../global.css";
 
 const stackSans = Stack_Sans_Text({
   variable: "--stack-sans",
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`h-full antialiased ${stackSans.className}`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-bg-primary">{children}</body>
     </html>
   );
 }

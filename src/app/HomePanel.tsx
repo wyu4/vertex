@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   BooleanSwitch,
   ChangingLabel,
@@ -10,7 +10,13 @@ import {
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { FaBoltLightning } from "react-icons/fa6";
-import { GrScorecard, GrTableAdd, GrTrophy } from "react-icons/gr";
+import {
+  GrCloudUpload,
+  GrScorecard,
+  GrTableAdd,
+  GrTrash,
+  GrTrophy,
+} from "react-icons/gr";
 import { resolveCssColor } from "@/utils/animation-helpers";
 import {
   calculatePointsForClimb,
@@ -18,8 +24,12 @@ import {
   createEmptySessionRecord,
 } from "@/utils/data/universal";
 import { Grade, GradeRecord } from "@/types/data";
+import { useFadeIn } from "./hooks/Animation";
+import { useBooleanPopup } from "./hooks/Popup";
 
 export default function HomePanel() {
+  const lineRef = useRef<HTMLDivElement>(null);
+
   const [currentRecord, setCurrentRecord] = useState(
     createEmptySessionRecord(),
   );
@@ -33,119 +43,166 @@ export default function HomePanel() {
     [grade, flashed],
   );
 
+  const trashFunction = () => {
+    setCurrentRecord(createEmptySessionRecord());
+    setGrade(null);
+    setFlashed(false);
+    setIncreasePts(0);
+  };
+
+  const [popupComponent, triggerPopup] = useBooleanPopup({
+    initialVisible: false,
+  });
+
+  useFadeIn(lineRef, { delay: 1, offsetY: 0, ease: "sine.out" });
+
   return (
-    <SecondaryDiv className="relative rounded-2xl flex flex-col justify-start items-center p-5 md:p-10 gap-2 md:gap-5">
-      <TertiaryDiv className="relative flex flex-col w-full justify-center items-center rounded-2xl p-5 gap-2">
-        <div className="text-xl md:text-2xl font-bold flex flex-col justify-center items-center gap-2">
-          <GrTrophy className="text-xl" />
-          <h1>Points</h1>
-        </div>
+    <>
+      {popupComponent}
+      <SecondaryDiv className="relative rounded-2xl flex flex-col justify-start items-center p-5 md:p-10 gap-2 md:gap-5">
+        <TertiaryDiv className="relative flex flex-col w-full justify-center items-center rounded-2xl p-5 gap-2">
+          <div className="text-xl md:text-2xl font-bold flex flex-col justify-center items-center gap-2">
+            <GrTrophy className="text-xl" />
+            <h1>Points</h1>
+          </div>
 
-        <div className="relative">
-          <ChangingLabel
-            className="text-center font-bold text-8xl leading-none"
-            text={calculateTotalPoints(currentRecord).toString()}
-          />
-          <ChangingLabel
-            className="absolute left-full bottom-1 ml-2 font-bold text-2xl text-positive-primary"
-            text={increasePts > 0 ? `+${increasePts}` : undefined}
-            easeTime={0.15}
-          />
-        </div>
+          <div className="relative">
+            <ChangingLabel
+              className="text-center font-bold text-8xl leading-none"
+              text={calculateTotalPoints(currentRecord).toString()}
+            />
+            <ChangingLabel
+              className="absolute left-full bottom-1 ml-2 font-bold text-2xl text-positive-primary"
+              text={increasePts > 0 ? `+${increasePts}` : undefined}
+              easeTime={0.15}
+            />
+          </div>
 
-        <div className="flex flex-row flex-nowrap justify-around items-center w-full gap-2 pt-3 border-t border-font-tertiary/15">
-          <GradeCounter color="var(--grade-pink)" count={currentRecord.pink} />
-          <GradeCounter
-            color="var(--grade-yellow)"
-            count={currentRecord.yellow}
-          />
-          <GradeCounter
-            color="var(--grade-green)"
-            count={currentRecord.green}
-          />
-          <GradeCounter
-            color="var(--grade-orange)"
-            count={currentRecord.orange}
-          />
-          <GradeCounter color="var(--grade-blue)" count={currentRecord.blue} />
-          <GradeCounter
-            color="var(--grade-white)"
-            count={currentRecord.white}
-          />
-        </div>
-      </TertiaryDiv>
-      <TertiaryDiv className="relative flex flex-col w-full justify-center items-center rounded-2xl p-5 gap-2">
-        <div className="text-xl md:text-2xl font-bold flex flex-row justify-center items-center gap-2">
-          <GrScorecard className="text-xl" />
-          <h1>Grade</h1>
-        </div>
-
-        <div className="relative h-10 flex flex-row justify-center items-center flex-nowrap gap-4 md:gap-5">
-          <GradeButton
-            color="var(--grade-pink)"
-            selected={grade === "pink"}
-            onSelect={() => setGrade("pink")}
-          />
-          <GradeButton
-            color="var(--grade-yellow)"
-            selected={grade === "yellow"}
-            onSelect={() => setGrade("yellow")}
-          />
-          <TertiaryDiv className="relative h-5 bg-positive-primary/25 rounded-xl flex flex-row justify-center items-center flex-nowrap gap-[inherit] p-5">
-            <GradeButton
+          <div className="flex flex-row flex-nowrap justify-around items-center w-full gap-2 pt-3 border-t border-font-tertiary/15">
+            <GradeCounter
+              color="var(--grade-pink)"
+              count={currentRecord.pink}
+            />
+            <GradeCounter
+              color="var(--grade-yellow)"
+              count={currentRecord.yellow}
+            />
+            <GradeCounter
               color="var(--grade-green)"
-              selected={grade === "green"}
-              onSelect={() => setGrade("green")}
+              count={currentRecord.green}
             />
-            <GradeButton
+            <GradeCounter
               color="var(--grade-orange)"
-              selected={grade === "orange"}
-              onSelect={() => setGrade("orange")}
+              count={currentRecord.orange}
             />
-            <GradeButton
+            <GradeCounter
               color="var(--grade-blue)"
-              selected={grade === "blue"}
-              onSelect={() => setGrade("blue")}
+              count={currentRecord.blue}
+            />
+            <GradeCounter
+              color="var(--grade-white)"
+              count={currentRecord.white}
+            />
+          </div>
+        </TertiaryDiv>
+        <TertiaryDiv className="relative flex flex-col w-full justify-center items-center rounded-2xl p-5 gap-2">
+          <div className="text-xl md:text-2xl font-bold flex flex-row justify-center items-center gap-2">
+            <GrScorecard className="text-xl" />
+            <h1>Grade</h1>
+          </div>
+
+          <div className="relative h-10 flex flex-row justify-center items-center flex-nowrap gap-4 md:gap-5">
+            <GradeButton
+              color="var(--grade-pink)"
+              selected={grade === "pink"}
+              onSelect={() => setGrade("pink")}
             />
             <GradeButton
-              color="var(--grade-white)"
-              selected={grade === "white"}
-              onSelect={() => setGrade("white")}
+              color="var(--grade-yellow)"
+              selected={grade === "yellow"}
+              onSelect={() => setGrade("yellow")}
             />
-          </TertiaryDiv>
+            <TertiaryDiv className="relative h-5 bg-positive-primary/25 rounded-xl flex flex-row justify-center items-center flex-nowrap gap-[inherit] p-5">
+              <GradeButton
+                color="var(--grade-green)"
+                selected={grade === "green"}
+                onSelect={() => setGrade("green")}
+              />
+              <GradeButton
+                color="var(--grade-orange)"
+                selected={grade === "orange"}
+                onSelect={() => setGrade("orange")}
+              />
+              <GradeButton
+                color="var(--grade-blue)"
+                selected={grade === "blue"}
+                onSelect={() => setGrade("blue")}
+              />
+              <GradeButton
+                color="var(--grade-white)"
+                selected={grade === "white"}
+                onSelect={() => setGrade("white")}
+              />
+            </TertiaryDiv>
+          </div>
+        </TertiaryDiv>
+        <TertiaryDiv className="relative flex flex-row w-full justify-between items-center rounded-2xl p-5 gap-2">
+          <div className="text-xl font-bold flex flex-row justify-start items-center gap-2">
+            <FaBoltLightning className="text-sm" />
+            <p>
+              Flash climb{" "}
+              <i className="font-normal text-font-secondary">(x2 points)</i>
+            </p>
+          </div>
+          <BooleanSwitch
+            overrideValue={flashed}
+            onSwitch={(v) => setFlashed(v)}
+          />
+        </TertiaryDiv>
+        <div className="relative w-full flex flex-row justify-between items-center">
+          <HomeButton
+            onClick={() =>
+              triggerPopup(
+                "Confirm Deletion",
+                "Are you sure you'd like to PERMANENTALLY delete your unsaved data?",
+                trashFunction,
+                undefined,
+              )
+            }
+            fadeInDelay={0.75}
+          >
+            <GrTrash className="text-negative-primary" />
+          </HomeButton>
+          <HomeButton
+            onClick={() => {
+              if (grade !== null) {
+                const key = flashed ? "flashed" : "regular";
+                setCurrentRecord((prev) => ({
+                  ...prev,
+                  [grade]: {
+                    ...prev[grade],
+                    [key]: prev[grade][key] + 1,
+                  },
+                }));
+              }
+              setIncreasePts(0);
+              setGrade(null);
+              setFlashed(false);
+            }}
+            fadeInDelay={0.5}
+          >
+            <GrTableAdd />
+          </HomeButton>
+          <HomeButton color="var(--positive-primary)" fadeInDelay={0.75}>
+            <GrCloudUpload className="text-bg-tertiary" />
+          </HomeButton>
+          <div
+            ref={lineRef}
+            className="absolute left-1 right-1 top-1/2 h-px bg-black/10 z-0"
+          />
         </div>
-      </TertiaryDiv>
-      <TertiaryDiv className="relative flex flex-row w-full justify-between items-center rounded-2xl p-5 gap-2">
-        <div className="text-xl font-bold flex flex-row justify-start items-center gap-2">
-          <FaBoltLightning className="text-sm" />
-          <p>
-            Flash climb{" "}
-            <i className="font-normal text-font-secondary">(x2 points)</i>
-          </p>
-        </div>
-        <BooleanSwitch
-          overrideValue={flashed}
-          onSwitch={(v) => setFlashed(v)}
-        />
-      </TertiaryDiv>
-      <AddButton
-        onClick={() => {
-          if (grade !== null) {
-            const key = flashed ? "flashed" : "regular";
-            setCurrentRecord((prev) => ({
-              ...prev,
-              [grade]: {
-                ...prev[grade],
-                [key]: prev[grade][key] + 1,
-              },
-            }));
-          }
-          setIncreasePts(0);
-          setGrade(null);
-          setFlashed(false);
-        }}
-      />
-    </SecondaryDiv>
+      </SecondaryDiv>
+    </>
   );
 }
 
@@ -170,7 +227,7 @@ function GradeCounter({
   );
 }
 
-export function GradeButton({
+function GradeButton({
   color,
   onSelect,
   selected = false,
@@ -213,17 +270,23 @@ export function GradeButton({
   );
 }
 
-export function AddButton({
+function HomeButton({
   onClick,
   color = "var(--bg-tertiary)",
+  children,
+  fadeInDelay = 0,
 }: {
   onClick?: () => void;
   color?: string;
+  children?: ReactNode;
+  fadeInDelay?: number;
 }) {
   const ref = useRef<HTMLButtonElement>(null);
   const initialLoad = useRef(true);
   const [mouseEntered, setMouseEntered] = useState(false);
   const [mouseDown, setMouseDown] = useState(false);
+
+  useFadeIn(ref, { delay: fadeInDelay, ease: "sine.out" });
 
   useGSAP(() => {
     const button = ref.current!;
@@ -254,13 +317,13 @@ export function AddButton({
     <button
       ref={ref}
       onClick={onClick}
-      className="relative select-none place-items-center p-5 rounded-full aspect-square text-2xl md:text-3xl ring-1 ring-black/10 bg-bg-tertiary shadow-md/5"
+      className="relative z-5 select-none place-items-center p-5 rounded-full aspect-square text-2xl md:text-3xl ring-1 ring-black/10 bg-bg-tertiary shadow-md/5"
       onMouseEnter={() => setMouseEntered(true)}
       onMouseLeave={() => setMouseEntered(false)}
       onMouseDown={() => setMouseDown(true)}
       onMouseUp={() => setMouseDown(false)}
     >
-      <GrTableAdd />
+      {children}
     </button>
   );
 }

@@ -22,7 +22,7 @@ export function useTimelineRef(
 }
 
 export function useFadeIn(
-  ref: RefObject<HTMLDivElement | null>,
+  ref: RefObject<HTMLElement | null>,
   {
     disabled = false,
     offsetY = 24,
@@ -34,7 +34,7 @@ export function useFadeIn(
     offsetY?: gsap.TweenValue;
     duration?: number;
     delay?: number;
-    ease?: string;
+    ease?: gsap.EaseFunction | gsap.EaseString;
   },
 ) {
   useGSAP(() => {
