@@ -170,7 +170,10 @@ function PopupButton({
       onClick={onClick}
       className="relative z-5 select-none place-items-center text-2xl md:text-3xl"
       onMouseEnter={() => setMouseEntered(true)}
-      onMouseLeave={() => setMouseEntered(false)}
+      onMouseLeave={() => {
+        setMouseEntered(false);
+        setMouseDown(false);
+      }}
       onMouseDown={() => setMouseDown(true)}
       onMouseUp={() => setMouseDown(false)}
     >
