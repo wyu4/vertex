@@ -141,14 +141,12 @@ export function useBooleanPopup({
   return [component, triggerFunction];
 }
 
-function PopupButton({
+export function PopupButton({
   onClick,
   children,
 }: {
   onClick?: () => void;
-  color?: string;
   children?: ReactNode;
-  fadeInDelay?: number;
 }) {
   const ref = useRef<HTMLButtonElement>(null);
   const [mouseEntered, setMouseEntered] = useState(false);

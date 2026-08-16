@@ -106,7 +106,7 @@ export const SessionDiv = forwardRef<
   },
 );
 
-function GradeCounter({
+export function GradeCounter({
   color,
   count = { regular: 0, flashed: 0 },
 }: {

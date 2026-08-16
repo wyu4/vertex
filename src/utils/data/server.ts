@@ -4,7 +4,7 @@ import { SessionRecord } from "@/types/data";
 import { FirebaseCert, getUserID } from "../auth/server";
 
 import { App, getApps, initializeApp } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
+import { FieldPath, FieldValue, getFirestore } from "firebase-admin/firestore";
 import { calculateTotalPoints, parseStringifiedSession } from "./universal";
 
 function getFirebaseAdminApp(): App {
@@ -61,6 +61,22 @@ export async function uploadRecord(record: SessionRecord) {
     );
   } catch (error) {
     console.error("Failed to upload record", error);
+    return false;
+  }
+
+  return true;
+}
+
+export async function deleteRecord(timestamp: string) {
+  const userID = await getUserID();
+  if (!userID) {
+    return false;
+  }
+  const recordDoc = db.collection("records").doc(userID);
+  try {
+    await recordDoc.update(new FieldPath(timestamp), FieldValue.delete());
+  } catch (error) {
+    console.error("Failed to delete record", error);
     return false;
   }
 
